@@ -1,27 +1,29 @@
 const express = require('express');
 const router = express.Router();
-const queries = require('../db/queries');
+const queries = require('../db/queries/user_queries.js');
 
 router.get('/', (req, res) => {
   queries
-  .getAll()
-  .then(usersGames => {
-    res.json(usersGames)
+  .getAllUsers()
+  .then(users => {
+    res.json({
+      users
+    });
   });
 
 });
 
 router.get('/:id', (req, res) => {
   queries
-  .getOne(req.params.id)
-  .then(usersGames => {
-    res.json(usersGames)
+  .getOneUser(req.params.id)
+  .then(user => {
+    res.json(user)
   });
 });
 
 router.post('/', (req, res, next) => {
   queries
-  .create(req.body)
+  .createUser(req.body)
   .then(usersGames => {
     res.json(usersGames[0])
   });
@@ -29,15 +31,15 @@ router.post('/', (req, res, next) => {
 
 router.put('/:id', (req, res, next) => {
   queries
-  .update(req.params.id, req.body)
-  .then(usersGames => {
-    res.json(usersGames[0])
+  .updateUser(req.params.id, req.body)
+  .then(user => {
+    res.json(user[0])
   });
 });
 
 router.delete('/:id', (req, res) => {
   queries
-  .delete(req.params.id)
+  .deleteUser(req.params.id)
   .then(() => {
     res.json({
       deleted: true

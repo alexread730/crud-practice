@@ -4,13 +4,14 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-const users = require('./api/users_games');
-
+const users = require('./api/users');
+const games = require('./api/games');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.use('/api/users_games', users)
+app.use('/api/users', users)
+app.use('/api/games', games)
 
 app.use(function(req, res, next) {
   let error = new Error('Not Found');
