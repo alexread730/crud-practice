@@ -4,7 +4,7 @@ module.exports = {
   getAll() {
     return knex('user_game')
               .join('user', 'user.id', 'user_id')
-              .join('game', 'game.id', 'game_id');
+              .join('game', 'game.id', 'game_id').select('user_game.id', "user_id", "game_id", "firstName", "lastName", "title", "year");
   },
   getOne(num) {
     return knex('user_game').where('user_game.id', num).first()
