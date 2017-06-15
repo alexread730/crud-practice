@@ -25,9 +25,22 @@ router.post('/', (req, res, next) => {
   queries
   .createUser(req.body)
   .then(usersGames => {
-    res.json(usersGames[0])
+    const newUser = usersGames[0];
+    let userInstances = [];
+    console.log(req.body.games);
+    for (let i=0; i<req.body.games; i++) {
+      userInstances.push({
+        user_id: newUser.id,
+        game_id: newUser.games[i]
+      });
+    }
+    console.log(userInstances);
+    });
+
+    knex('user_game')
+      .insert(userInstances);
+      res.json(userInstances)
   });
-});
 
 router.put('/:id', (req, res, next) => {
   queries

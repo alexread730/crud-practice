@@ -6,7 +6,9 @@ router.get('/', (req, res) => {
   queries
   .getAllGames()
   .then(games => {
-    res.json(games)
+    res.json({
+      games
+    });
   });
 
 });
