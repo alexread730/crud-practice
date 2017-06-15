@@ -5,7 +5,8 @@ function getGamesWithUsers() {
             .join('user', 'user.id', 'user_id')
             .join('game', 'game.id', 'game_id')
             .select('user_game.id', "game_id", "title", "year", "title", "firstName", "lastName")
-            .then(users => {
+            .then(
+              users => {
               const gamesWithUsers = [];
               const gamesByTitle = {};
               console.log(users);
@@ -24,7 +25,8 @@ function getGamesWithUsers() {
                 gamesByTitle[game.title].users.push(game.firstName + " " + game.lastName);
               });
               return gamesWithUsers;
-            });
+            }
+          );
 }
 
 module.exports = {
@@ -61,9 +63,7 @@ module.exports = {
   },
   createGame(game) {
     return knex('game')
-            .insert({
-            firstName: person.firstName,
-            lastName: person.lastName}, '*');
+              .insert();
 
   },
   updateGame(id, newData) {

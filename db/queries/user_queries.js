@@ -62,10 +62,22 @@ module.exports = {
               });
   },
   createUser(person) {
-    return knex('user')
+      // let promises = [];
+      return  knex('user')
             .insert({
             firstName: person.firstName,
             lastName: person.lastName}, '*');
+            // .then(user => {
+            //   for (let i = 0; i < person.games.length; i++) {
+            //     promises.push(knex('user_game')
+            //         .insert({
+            //           user_id: user.id,
+            //           game_id: person.games[i]
+            //         }));
+            //   };
+            //   return Promise
+            //           .all(promises);
+            // });
 
   },
   updateUser(id, newData) {

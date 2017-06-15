@@ -1,7 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../db/queries/user_queries.js');
+const knex = require('../db/knex');
 
+
+function isValidUser(user) {
+  let userPresent = typeof user == 'string' && user.firstName.trim() != '';
+}
 router.get('/', (req, res) => {
   queries
   .getAllUsers()
@@ -17,30 +22,29 @@ router.get('/:id', (req, res) => {
   queries
   .getOneUser(req.params.id)
   .then(user => {
-    res.json(user)
+    res.json({
+      user
+    })
   });
 });
 
 router.post('/', (req, res, next) => {
   queries
   .createUser(req.body)
-  .then(usersGames => {
-    const newUser = usersGames[0];
-    let userInstances = [];
-    console.log(req.body.games);
-    for (let i=0; i<req.body.games; i++) {
-      userInstances.push({
-        user_id: newUser.id,
-        game_id: newUser.games[i]
-      });
-    }
-    console.log(userInstances);
-    });
-
-    knex('user_game')
-      .insert(userInstances);
-      res.json(userInstances)
+  .then(user => {
+    res.json(user[0])
+    let promises = [];
+      for (let i = 0; i < req.body.games.length; i++) {
+          promises.push(knex('user_game')
+              .insert({
+                user_id: user[0].id,
+                game_id: req.body.games[i]
+              }, '*'));
+            }
+      return Promise
+              .all(promises);
   });
+});
 
 router.put('/:id', (req, res, next) => {
   queries
