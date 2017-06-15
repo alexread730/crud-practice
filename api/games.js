@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../db/queries/game_queries.js');
+const knex = require('../db/knex');
 
 router.get('/', (req, res) => {
   queries
@@ -26,6 +27,16 @@ router.post('/', (req, res, next) => {
   .createGame(req.body)
   .then(game => {
     res.json(game[0])
+    let promises = [];
+      for (let i = 0; i < req.body.users.length; i++) {
+          promises.push(knex('user_game')
+              .insert({
+                game_id: game[0].id,
+                user_id: req.body.users[i]
+              }, '*'));
+            }
+      return Promise
+              .all(promises);
   });
 });
 

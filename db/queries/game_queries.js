@@ -9,7 +9,6 @@ function getGamesWithUsers() {
               users => {
               const gamesWithUsers = [];
               const gamesByTitle = {};
-              console.log(users);
               users.forEach(game => {
                 if(!gamesByTitle[game.title]) {
                   const gameWithPeople = {
@@ -62,8 +61,10 @@ module.exports = {
               });
   },
   createGame(game) {
-    return knex('game')
-              .insert();
+    return  knex('game')
+          .insert({
+              title: game.title,
+              year: game.year}, '*');
 
   },
   updateGame(id, newData) {
@@ -71,7 +72,9 @@ module.exports = {
             .update(newData, '*');
   },
   deleteGame(id) {
-    return knex('game')
-            .where('game.id', id).del();
+    let promises = [];
+     promises.push(knex('user_game').where('game_id', id).del());
+     promises.push(knex('game').where('game.id', id).del());
+     return Promise.all(promises);
   }
 }
